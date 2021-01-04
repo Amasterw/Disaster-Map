@@ -27,14 +27,13 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geoj
 
 function createMarkers(earthquakeData) {
     console.log(earthquakeData);
-    var earthquakes = earthquakeData.properties;
+    var earthquakes = earthquakeData.features;
     var earthquakeMarkers = [];
     
-    for (var index = 0; index < earthquakeData.properties; index++){
+    for (var index = 0; index < earthquakes.properties; index++){
         var earthquake = earthquakes[index];
-        var earthquakeMarker = L.marker([earthquake.lat, earthquake.lon]).bindPopup("<h3>" + feature.properties.place +
-        "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" +
-        "</h3><hr><p>Magnitude: " + feature.properties.mag + "</p>"); 
+        var earthquakeMarker = L.marker([earthquake.coordinates])
+            .bindPopup("<h3>"+ earthquake.place + "</h3>" + "<h3>" + earthquake.title + "</h3>"  ); 
         earthquakeMarkers.push(earthquakeMarker);
     }
     createMap(L.layerGroup(earthquakeMarkers));
