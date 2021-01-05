@@ -22,7 +22,7 @@ L.control.layers(baseMaps, overlayMaps, {
     collaspsed: false
 }).addTo(myMap);
 
-
+//add data
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson", function (data){
     console.log(data);
     function styleinfo(features) {
@@ -33,7 +33,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geoj
           stroke: true,
           weight: 0.2,
           fillOpacity: 0.5,
-          color: "black",
+          color: "red",
           opacity: 1,
         };
     };
@@ -56,8 +56,8 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geoj
             return "#4d9221";
         }
     };
+    //create circles
     L.geoJSON(data, {
-        //   create a circlemarker
         pointToLayer: function (feature, latlng) {
           return L.circleMarker(latlng);
         },
@@ -77,3 +77,37 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geoj
         },
     }).addTo(Earthquake);
 });Earthquake.addTo(myMap);  
+
+//create legend
+var legend = L.control({
+    position: "bottomleft",
+  });
+
+function getColor(d) {
+    return d < 1 ? 'rgb(255,255,255)' :
+          d < 2  ? 'rgb(255,225,225)' :
+          d < 3  ? 'rgb(255,195,195)' :
+          d < 4  ? 'rgb(255,165,165)' :
+          d < 5  ? 'rgb(255,135,135)' :
+          d < 6  ? 'rgb(255,105,105)' :
+          d < 7  ? 'rgb(255,75,75)' :
+          d < 8  ? 'rgb(255,45,45)' :
+          d < 9  ? 'rgb(255,15,15)' :
+                      'rgb(255,0,0)';
+}
+legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend"),
+      grades = [0, 10, 30, 50, 70, 90];
+      labels = [];
+
+    div.innerHTML+='Magnitude<br><hr>'
+
+    // loop through and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+        '<i style="background:' + getColor(grades[i] + 1) + '">&nbsp&nbsp&nbsp&nbsp</i> ' +
+        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+    return div;
+  };
+  legend.addTo(myMap);
