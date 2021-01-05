@@ -73,6 +73,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geoj
               feature.properties.mag +
               "<br>Depth(km): " +
               feature.geometry.coordinates[2]
-        );
-    }.addTo(Earthquake),
-})}).Earthquake.addTo(myMap);  
+         );
+        },
+    }).addTo(Earthquake);
+});Earthquake.addTo(myMap);  
